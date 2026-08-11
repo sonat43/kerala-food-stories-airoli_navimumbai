@@ -21,10 +21,13 @@ function validate(form) {
   return errors
 }
 
-function formatMessage(form, items, total, savings) {
+function formatMessage(form, items, savings) {
   const typeLabel = form.type === 'delivery' ? 'Home Delivery' : 'Dine-in / Takeaway'
   const locationLabel = form.type === 'delivery' ? 'Address' : 'Pickup / Table'
-  const itemLines = items.map((item) => `• ${item.quantity} × ${item.name} — ₹${item.price * item.quantity}`).join('\n')
+  const itemLines = items.map((item) => shouldHidePrice(item)
+    ? `• ${item.quantity} × ${item.name} — price of fish`
+    : `• ${item.quantity} × ${item.name} — ₹${item.price * item.quantity}`).join('\n')
+  const messageTotal = getDisplayedTotal(items)
 
   return `*— NEW ORDER FROM KERALA FOOD STORIES —*
 
@@ -38,7 +41,7 @@ ${itemLines}
 
 📝 *Special Notes:* ${form.notes.trim() || 'None'}
 ────────────────────
-💰 *TOTAL AMOUNT: ₹${total}*${savings ? `\n✨ *FEAST SAVINGS: ₹${savings}*` : ''}
+💰 *TOTAL AMOUNT: ${messageTotal}*${savings ? `\n✨ *FEAST SAVINGS: ₹${savings}*` : ''}
 ────────────────────
 Please confirm this order and share the estimated preparation time. Thank you!`
 }
@@ -88,7 +91,7 @@ export default function CartDrawer() {
     }
 
     const whatsappNumber = (import.meta.env.VITE_WHATSAPP_NUMBER || '917208207729').replace(/\D/g, '')
-    const message = formatMessage(form, items, total, savings)
+    const message = formatMessage(form, items, savings)
     window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer')
     setSent(true)
     void logOrder(order)
@@ -209,7 +212,7 @@ export default function CartDrawer() {
                     <span className="font-display text-lg font-semibold text-teak">{displayedTotal}</span>
                   </div>
                   <button onClick={submitOrder} className="flex h-13 w-full items-center justify-center gap-3 rounded-xl bg-[#227448] px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#227448]/15 transition hover:bg-[#185d38] active:scale-[0.99]">
-                    {sent ? <><Check size={18} /> Opened in WhatsApp</> : <>Send order via WhatsApp <ChevronRight size={18} /></>}
+                    {sent ? <><Check size={18} /> Opened in WhatsApp</> : <>Send order <ChevronRight size={18} /></>}
                   </button>
                   <p className="mt-2 text-center text-[10px] leading-4 text-teak/40">No payment now. We’ll confirm availability and timing on WhatsApp.</p>
                 </div>
