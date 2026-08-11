@@ -2,7 +2,7 @@ import { motion as Motion } from 'framer-motion'
 
 export default function CategoryFilter({ categories, selected, onChange }) {
   return (
-    <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 pb-2 sm:mx-0 sm:flex-wrap sm:px-0" role="tablist" aria-label="Menu categories">
+    <div className="no-scrollbar flex gap-2 overflow-x-auto pb-2 sm:flex-wrap" role="tablist" aria-label="Menu categories">
       {categories.map((category) => {
         const active = category.id === selected
         return (
@@ -11,10 +11,10 @@ export default function CategoryFilter({ categories, selected, onChange }) {
             role="tab"
             aria-selected={active}
             onClick={() => onChange(category.id)}
-            className={`relative shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold transition ${active ? 'text-white' : 'border border-sand bg-paper text-teak/65 hover:border-teak/20 hover:text-teak'}`}
+            className={`relative isolate shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold shadow-[0_2px_8px_rgba(43,35,29,0.03)] transition ${active ? 'text-white shadow-[0_5px_14px_rgba(184,74,40,0.2)]' : 'border border-sand/80 bg-white/70 text-teak/65 backdrop-blur-sm hover:border-clay/25 hover:bg-white hover:text-teak'}`}
           >
-            {active && <Motion.span layoutId="active-category" className="absolute inset-0 -z-10 rounded-full bg-teak" transition={{ type: 'spring', stiffness: 420, damping: 34 }} />}
-            {category.label}
+            {active && <Motion.span layoutId="active-category" className="absolute inset-0 z-0 rounded-full bg-clay" transition={{ type: 'spring', stiffness: 420, damping: 34 }} />}
+            <span className="relative z-10">{category.label}</span>
           </button>
         )
       })}

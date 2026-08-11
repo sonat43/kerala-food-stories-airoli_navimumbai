@@ -9,6 +9,7 @@
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  color-scheme: light;
 }
 
 html {
@@ -19,6 +20,15 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(255, 255, 255, 0.95), transparent 28rem),
+    #f9f6f0;
+}
+
+[lang='ml'] {
+  font-family: 'Noto Serif Malayalam', Georgia, serif;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 button,
@@ -47,7 +57,7 @@ textarea:focus-visible {
   }
 
   .form-input {
-    @apply w-full rounded-xl border border-sand bg-paper px-3.5 py-3 text-sm text-teak outline-none transition placeholder:text-teak/30 focus:border-clay/50 focus:ring-2 focus:ring-clay/10;
+    @apply w-full rounded-2xl border border-sand/80 bg-white/75 px-4 py-3.5 text-sm text-teak shadow-[0_2px_10px_rgba(43,35,29,0.025)] outline-none backdrop-blur-sm transition placeholder:text-teak/30 focus:border-clay/50 focus:bg-white focus:ring-4 focus:ring-clay/10;
   }
 }
 
@@ -57,6 +67,22 @@ textarea:focus-visible {
     linear-gradient(-45deg, transparent 48%, rgba(255, 255, 255, 0.08) 49%, rgba(255, 255, 255, 0.08) 51%, transparent 52%);
   background-size: 54px 54px;
   mask-image: linear-gradient(to right, rgba(0,0,0,.5), transparent 65%);
+  animation: heritage-drift 18s ease-in-out infinite alternate;
+}
+
+@keyframes heritage-drift {
+  from { transform: translate3d(-1%, -1%, 0) scale(1); }
+  to { transform: translate3d(1%, 1%, 0) scale(1.04); }
+}
+
+button,
+a {
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+button:active,
+a:active {
+  transform: scale(0.98);
 }
 
 .image-fallback {
@@ -65,6 +91,72 @@ textarea:focus-visible {
     linear-gradient(30deg, rgba(184, 74, 40, 0.06) 12%, transparent 12.5%, transparent 87%, rgba(184, 74, 40, 0.06) 87.5%),
     linear-gradient(150deg, rgba(184, 74, 40, 0.06) 12%, transparent 12.5%, transparent 87%, rgba(184, 74, 40, 0.06) 87.5%);
   background-size: 36px 62px;
+}
+
+.story-caption p:last-child {
+  color: rgba(30, 25, 21, 0.52);
+}
+
+.site-header a > span > span:last-child {
+  color: rgba(249, 246, 240, 0.5);
+}
+
+.story-section {
+  background-color: #ebe2d5;
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(184, 74, 40, 0.1), transparent 22rem),
+    radial-gradient(circle at 88% 80%, rgba(58, 90, 64, 0.1), transparent 24rem),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.28), transparent 48%);
+}
+
+.story-section::before {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: '';
+  opacity: 0.16;
+  background-image: linear-gradient(135deg, transparent 48%, rgba(184, 74, 40, 0.08) 49%, transparent 51%);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom right, rgba(0, 0, 0, 0.45), transparent 62%);
+}
+
+.story-caption::before {
+  display: block;
+  width: 2.25rem;
+  height: 0.2rem;
+  margin-bottom: 0.65rem;
+  content: '';
+  border-radius: 999px;
+  background: #b84a28;
+}
+
+.story-caption [lang='ml'] {
+  color: #3a5a40;
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.menu-feature-caption::before {
+  display: block;
+  width: 2rem;
+  height: 0.18rem;
+  margin-bottom: 0.65rem;
+  content: '';
+  border-radius: 999px;
+  background: #b84a28;
+}
+
+.menu-feature-caption > p:first-of-type {
+  color: #b84a28;
+}
+
+.menu-feature-caption > div:last-child {
+  color: rgba(30, 25, 21, 0.52);
+}
+
+.menu-feature-caption > div:last-child svg {
+  color: #b84a28;
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -92,5 +184,9 @@ textarea:focus-visible {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .heritage-pattern {
+    animation: none;
   }
 }

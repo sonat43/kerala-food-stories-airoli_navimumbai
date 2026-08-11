@@ -3,6 +3,7 @@ import { AnimatePresence, motion as Motion } from 'framer-motion'
 import { Check, ChevronRight, Minus, Plus, ShoppingBag, Trash2, X } from 'lucide-react'
 import { useCart } from '../context/CartContext'
 import { logOrder } from '../services/menuService'
+import { getDisplayedTotal, shouldHidePrice } from '../utils/priceDisplay'
 
 const initialForm = {
   name: '',
@@ -44,6 +45,7 @@ Please confirm this order and share the estimated preparation time. Thank you!`
 
 export default function CartDrawer() {
   const { items, total, savings, isCartOpen, setIsCartOpen, addItem, decrementItem, removeItem } = useCart()
+  const displayedTotal = getDisplayedTotal(items)
   const [form, setForm] = useState(initialForm)
   const [errors, setErrors] = useState({})
   const [sent, setSent] = useState(false)
@@ -114,10 +116,10 @@ export default function CartDrawer() {
             transition={{ type: 'spring', stiffness: 360, damping: 36 }}
             className="fixed inset-y-0 right-0 z-50 flex w-full max-w-[480px] flex-col bg-kasavu shadow-2xl"
           >
-            <div className="flex h-[76px] shrink-0 items-center justify-between border-b border-sand px-5 sm:px-7">
+            <div className="flex h-[68px] shrink-0 items-center justify-between border-b border-sand px-5 sm:px-7">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-clay">Your selection</p>
-                <h2 id="cart-title" className="font-display text-2xl font-semibold text-teak">Order basket</h2>
+                <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-clay">Your selection</p>
+                <h2 id="cart-title" className="font-display text-xl font-semibold leading-tight text-teak">Order basket</h2>
               </div>
               <button onClick={() => setIsCartOpen(false)} className="grid h-10 w-10 place-items-center rounded-full border border-sand bg-paper text-teak transition hover:bg-sand/50" aria-label="Close cart">
                 <X size={19} />
@@ -127,7 +129,7 @@ export default function CartDrawer() {
             {items.length === 0 ? (
               <div className="flex flex-1 flex-col items-center justify-center px-8 text-center">
                 <span className="grid h-20 w-20 place-items-center rounded-full bg-sand/50 text-clay"><ShoppingBag size={31} strokeWidth={1.4} /></span>
-                <h3 className="mt-6 font-display text-2xl text-teak">Your banana leaf is empty</h3>
+                <h3 className="mt-5 font-display text-xl text-teak">Your banana leaf is empty</h3>
                 <p className="mt-2 max-w-xs text-sm leading-6 text-teak/55">Choose a few dishes from the menu and they’ll appear here.</p>
                 <button onClick={() => setIsCartOpen(false)} className="mt-6 rounded-full bg-teak px-6 py-3 text-sm font-bold text-white">Explore the menu</button>
               </div>
@@ -145,7 +147,7 @@ export default function CartDrawer() {
                                 <h3 className="truncate text-sm font-bold text-teak">{item.name}</h3>
                                 {item.isCombo && <span className="shrink-0 rounded-full bg-clay/10 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-clay">Feast set</span>}
                               </div>
-                              <p className="mt-0.5 text-xs text-teak/45">₹{item.price} each {item.originalPrice && <span className="ml-1 text-teak/25 line-through">₹{item.originalPrice}</span>}</p>
+                              {shouldHidePrice(item) ? <p className="mt-0.5 text-xs text-teak/45">Quantity selected</p> : <p className="mt-0.5 text-xs text-teak/45">₹{item.basePrice || item.price} each {item.parcelCharge > 0 && <span className="ml-1 text-clay/70">+ ₹{item.parcelCharge} parcel</span>} {item.originalPrice && <span className="ml-1 text-teak/25 line-through">₹{item.originalPrice}</span>}</p>}
                             </div>
                             <button onClick={() => removeItem(item.id)} className="text-teak/30 transition hover:text-clay" aria-label={`Remove ${item.name}`}><Trash2 size={15} /></button>
                           </div>
@@ -155,7 +157,7 @@ export default function CartDrawer() {
                               <span className="min-w-6 text-center text-xs font-bold">{item.quantity}</span>
                               <button onClick={() => addItem(item)} className="grid h-7 w-7 place-items-center" aria-label={`Add one ${item.name}`}><Plus size={12} /></button>
                             </div>
-                            <span className="text-sm font-bold text-teak">₹{item.price * item.quantity}</span>
+                            {!shouldHidePrice(item) && <span className="text-sm font-bold text-teak">₹{item.price * item.quantity}</span>}
                           </div>
                         </div>
                       </Motion.div>
@@ -204,7 +206,7 @@ export default function CartDrawer() {
                   )}
                   <div className="mb-3 flex items-center justify-between">
                     <span className="text-sm text-teak/55">Order total</span>
-                    <span className="font-display text-2xl font-semibold text-teak">₹{total}</span>
+                    <span className="font-display text-lg font-semibold text-teak">{displayedTotal}</span>
                   </div>
                   <button onClick={submitOrder} className="flex h-13 w-full items-center justify-center gap-3 rounded-xl bg-[#227448] px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#227448]/15 transition hover:bg-[#185d38] active:scale-[0.99]">
                     {sent ? <><Check size={18} /> Opened in WhatsApp</> : <>Send order via WhatsApp <ChevronRight size={18} /></>}

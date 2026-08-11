@@ -11,6 +11,7 @@ import HospitalityPromises from './components/HospitalityPromises'
 import { categories } from './data/seedDishes'
 import { fetchDishes } from './services/menuService'
 import { useCart } from './context/CartContext'
+import { getDisplayedTotal } from './utils/priceDisplay'
 
 export default function App() {
   const [dishes, setDishes] = useState([])
@@ -18,7 +19,8 @@ export default function App() {
   const [dietaryFilter, setDietaryFilter] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [loading, setLoading] = useState(true)
-  const { itemCount, total, setIsCartOpen } = useCart()
+  const { itemCount, items, setIsCartOpen } = useCart()
+  const displayedTotal = getDisplayedTotal(items)
 
   useEffect(() => {
     let active = true
@@ -63,7 +65,7 @@ export default function App() {
           <div className="relative mx-auto flex min-h-[calc(100svh-76px)] max-w-7xl items-center px-5 py-20 sm:px-8">
             <Motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="max-w-2xl">
               <div className="mb-6 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.24em] text-[#e0bd82]">
-                <span className="h-px w-9 bg-[#e0bd82]" /> From Kerala to Airoli, with warmth
+                <span className="h-px w-9 bg-[#e0bd82]" /> Authentic Kerala taste · From Kerala to Airoli
               </div>
               <h1 className="font-display text-[clamp(3.5rem,8vw,7rem)] font-semibold leading-[0.9] tracking-[-0.045em]">
                 A feast that<br />feels like <em className="text-[#e7c68e]">home.</em>
@@ -78,6 +80,10 @@ export default function App() {
                 <a href="#visit" className="flex items-center gap-2 rounded-full border border-white/20 bg-white/[0.06] px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/10">
                   Find us in Airoli <ArrowRight size={16} />
                 </a>
+              </div>
+              <div className="mt-7 max-w-md border-l-2 border-[#e0bd82]/70 pl-4">
+                <p className="font-display text-lg italic text-[#f0d2a1]" lang="ml">ഇവിടെ ഭക്ഷണം മാത്രമല്ല, ഓർമ്മകളും വിളമ്പുന്നു.</p>
+                <p className="mt-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/45">Not just food. A little piece of home.</p>
               </div>
               <div className="mt-11 flex flex-wrap gap-x-7 gap-y-3 border-t border-white/12 pt-6 text-xs font-medium text-white/50">
                 <span className="flex items-center gap-2"><Sparkles size={14} className="text-[#e0bd82]" /> Small-batch cooking</span>
@@ -118,25 +124,25 @@ export default function App() {
                 <div className="relative min-h-[270px] overflow-hidden lg:min-h-full">
                   <img src="/images/menu-meals-pothichor.jpg" alt="Kerala meal and banana-leaf pothichor served at Kerala Food Stories" className="absolute inset-0 h-full w-full object-cover object-center" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-teak/80 via-teak/10 to-transparent lg:bg-[linear-gradient(90deg,rgba(30,25,21,.24),transparent_46%),linear-gradient(0deg,rgba(30,25,21,.72),transparent_38%)]" />
-                  <div className="absolute inset-x-5 bottom-5 rounded-2xl border border-white/15 bg-teak/70 p-4 text-white backdrop-blur-md sm:inset-x-7 sm:bottom-7 sm:p-5">
+                  <div className="menu-feature-caption absolute inset-x-5 bottom-5 rounded-2xl border border-white/65 bg-paper/90 p-3.5 text-teak shadow-[0_10px_28px_rgba(30,25,21,0.16)] backdrop-blur-xl sm:inset-x-7 sm:bottom-7 sm:p-4">
                     <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#e7c68e]">Today’s familiar table</p>
-                    <p className="mt-2 max-w-xs font-display text-xl font-semibold leading-snug">Meals, fish fry, and the pothichor you open like a little gift.</p>
-                    <div className="mt-3 flex items-center gap-2 text-[11px] text-white/65"><Sparkles size={13} className="text-[#e7c68e]" /> Made for the way Malayalis eat.</div>
+                    <p className="mt-1.5 max-w-[15rem] font-display text-lg font-semibold leading-[1.12] sm:text-xl">Meals, fish fry, and the pothichor you open like a little gift.</p>
+                    <div className="mt-2.5 flex items-center gap-2 text-[10px] text-white/65"><Sparkles size={12} className="text-[#e7c68e]" /> Made for the way Malayalis eat.</div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="mt-10 border-y border-sand py-5">
+            <div className="mt-10 rounded-[1.75rem] border border-sand/80 bg-white/55 p-4 shadow-[0_12px_30px_rgba(43,35,29,0.045)] backdrop-blur-sm sm:p-5">
               <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <CategoryFilter categories={categories} selected={selectedCategory} onChange={setSelectedCategory} />
-                <div className="flex shrink-0 items-center gap-1 rounded-full bg-sand/60 p-1 text-xs font-bold">
-                  {[
+                <div className="flex shrink-0 items-center gap-1 rounded-full border border-sand/70 bg-white/55 p-1 text-xs font-bold shadow-[0_2px_10px_rgba(43,35,29,0.03)] backdrop-blur-sm">
+                  {[ 
                     { id: 'all', label: 'All' },
                     { id: 'veg', label: 'Veg' },
                     { id: 'nonveg', label: 'Non-veg' },
                   ].map((option) => (
-                    <button key={option.id} onClick={() => setDietaryFilter(option.id)} className={`rounded-full px-4 py-2 transition ${dietaryFilter === option.id ? 'bg-paper text-teak shadow-sm' : 'text-teak/45 hover:text-teak'}`}>
+                    <button key={option.id} onClick={() => setDietaryFilter(option.id)} className={`rounded-full px-4 py-2 transition ${dietaryFilter === option.id ? 'bg-clay text-white shadow-[0_5px_12px_rgba(184,74,40,0.18)]' : 'text-teak/45 hover:text-teak'}`}>
                       {option.label}
                     </button>
                   ))}
@@ -145,17 +151,17 @@ export default function App() {
               <div className="mt-4 flex flex-col gap-3 border-t border-sand/70 pt-4 sm:flex-row sm:items-center sm:justify-between">
                 <label className="relative block w-full max-w-md">
                   <span className="sr-only">Search the menu</span>
-                  <Search size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-teak/35" />
+                  <Search size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-clay/55" />
                   <input
                     type="search"
                     value={searchQuery}
                     onChange={(event) => setSearchQuery(event.target.value)}
                     placeholder="Search biryani, seafood, appam…"
-                    className="w-full rounded-full border border-sand bg-paper py-2.5 pl-10 pr-10 text-sm text-teak outline-none transition placeholder:text-teak/35 focus:border-clay/40 focus:ring-2 focus:ring-clay/10"
+                    className="w-full rounded-2xl border border-sand/80 bg-white/80 py-3 pl-10 pr-10 text-sm text-teak shadow-[0_2px_10px_rgba(43,35,29,0.025)] outline-none backdrop-blur-sm transition placeholder:text-teak/40 focus:border-clay/40 focus:bg-white focus:ring-4 focus:ring-clay/10"
                   />
                   {searchQuery && <button onClick={() => setSearchQuery('')} className="absolute right-2.5 top-1/2 grid h-7 w-7 -translate-y-1/2 place-items-center rounded-full text-teak/35 transition hover:bg-sand hover:text-teak" aria-label="Clear menu search"><X size={14} /></button>}
                 </label>
-                {!loading && <p className="shrink-0 text-xs font-medium text-teak/40">Showing {filteredDishes.length} of {dishes.length} dishes</p>}
+                {!loading && <p className="shrink-0 text-xs font-semibold text-clay/65">Showing {filteredDishes.length} of {dishes.length} dishes</p>}
               </div>
             </div>
 
@@ -190,12 +196,12 @@ export default function App() {
         <ComboOffers dishes={dishes} />
         <HospitalityPromises />
 
-        <section id="story" className="scroll-mt-20 bg-[#e9dfd1] px-5 py-20 sm:px-8 sm:py-28">
+        <section id="story" className="story-section relative scroll-mt-20 overflow-hidden px-5 py-20 sm:px-8 sm:py-28">
           <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1fr_0.9fr] lg:gap-20">
             <div className="relative overflow-hidden rounded-[2rem] bg-teak shadow-soft">
               <img src="/images/kerala-feast-hero.png" alt="Appam, curry and biryani prepared in traditional serving ware" loading="lazy" className="aspect-[5/4] h-full w-full object-cover object-right" />
               <div className="absolute inset-0 bg-gradient-to-t from-teak/50 to-transparent" />
-              <div className="absolute bottom-5 left-5 rounded-xl border border-white/15 bg-teak/75 px-4 py-3 text-white backdrop-blur-md">
+              <div className="story-caption absolute bottom-5 left-5 max-w-[18rem] rounded-2xl border border-white/45 bg-paper/90 px-4 py-3 text-teak shadow-[0_8px_24px_rgba(30,25,21,0.14)] backdrop-blur-md">
                 <p className="font-display text-lg italic" lang="ml">“നാടിന്റെ രുചി, വീട്ടിലെ ഓർമ്മ.”</p>
                 <p className="mt-1 text-[10px] uppercase tracking-widest text-white/55">The taste of home, remembered</p>
               </div>
@@ -235,11 +241,16 @@ export default function App() {
                   <a href="tel:+917208207729" className="flex items-center gap-2 rounded-full border border-white/15 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/10"><Phone size={16} /> Call restaurant</a>
                 </div>
               </div>
-              <div className="min-h-[360px] overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/5 p-1.5 shadow-2xl">
+              <div className="relative min-h-[360px] overflow-hidden rounded-[2rem] border border-white/15 bg-[#e8dfd2] p-2 shadow-[0_22px_60px_rgba(0,0,0,0.22)]">
+                <div className="pointer-events-none absolute left-6 top-6 z-10 rounded-2xl border border-white/70 bg-[#fffdf9]/90 px-4 py-3 text-teak shadow-[0_10px_28px_rgba(43,35,29,0.16)] backdrop-blur-xl">
+                  <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-clay">Our table in Airoli</p>
+                  <p className="mt-1 font-display text-lg font-semibold leading-tight">Kerala Food Stories</p>
+                  <p className="mt-0.5 text-[11px] text-teak/55">Sector 20 · Navi Mumbai</p>
+                </div>
                 <iframe
                   title="Kerala Food Stories location in Airoli"
                   src="https://www.google.com/maps?q=Kerala%20Food%20Stories%20Airoli%20Navi%20Mumbai&output=embed"
-                  className="h-full min-h-[350px] w-full rounded-[1.4rem] border-0 grayscale-[15%]"
+                  className="h-full min-h-[350px] w-full rounded-[1.5rem] border-0 grayscale-[8%]"
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   allowFullScreen
@@ -249,12 +260,13 @@ export default function App() {
             <footer className="flex flex-col gap-5 pt-8 text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between">
               <p>© {new Date().getFullYear()} Kerala Food Stories. Made with Kerala heart in Airoli.</p>
               <p className="flex items-center gap-2"><MessageCircle size={14} /> Orders are confirmed personally on WhatsApp</p>
+              <p>With love · Powered by <a href="https://renderberry.in" target="_blank" rel="noreferrer" className="text-[#d9b679] transition hover:text-white">renderberry.in</a></p>
             </footer>
           </div>
         </section>
       </main>
 
-      <AnimateMobileCart itemCount={itemCount} total={total} onClick={() => setIsCartOpen(true)} />
+      <AnimateMobileCart itemCount={itemCount} total={displayedTotal} onClick={() => setIsCartOpen(true)} />
       <CartDrawer />
     </div>
   )
@@ -268,10 +280,11 @@ function AnimateMobileCart({ itemCount, total, onClick }) {
       animate={{ y: 0, opacity: 1 }}
       exit={{ y: 80, opacity: 0 }}
       onClick={onClick}
-      className="fixed inset-x-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-30 flex items-center justify-between rounded-2xl bg-clay px-5 py-3.5 text-white shadow-2xl md:hidden"
+      className="fixed inset-x-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-30 grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-[1.35rem] border border-white/15 bg-clay/95 px-3 py-2.5 text-white shadow-2xl backdrop-blur-xl md:hidden"
     >
-      <span className="flex items-center gap-3 text-sm font-bold"><span className="grid h-7 min-w-7 place-items-center rounded-full bg-white/15 px-2">{itemCount}</span><ShoppingBag size={18} /> View order</span>
-      <span className="font-bold">₹{total}</span>
+      <span className="grid h-9 min-w-9 place-items-center rounded-full bg-white/15 px-2 text-sm font-bold">{itemCount}</span>
+      <span className="flex min-w-0 items-center gap-2 text-sm font-bold"><ShoppingBag size={18} className="shrink-0" /> <span className="truncate">View order</span></span>
+      <span className="max-w-[9.5rem] rounded-full bg-black/10 px-2.5 py-1 text-right text-[11px] font-bold leading-4 whitespace-normal">{total}</span>
     </Motion.button>
   )
 }
