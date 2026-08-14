@@ -4,7 +4,7 @@ export const signaturePairings = [
     name: 'Puttu & Kadala',
     malayalamName: 'പുട്ടും കടലയും',
     note: 'A Kerala morning, any time of day.',
-    imageUrl: '/images/menu-porotta-curries.jpg',
+    imageUrl: '/images/menu-puttkadala.png',
     items: [
       { dishId: 'puttu-white', quantity: 1 },
       { dishId: 'kadala-curry', quantity: 1 },
@@ -15,7 +15,7 @@ export const signaturePairings = [
     name: 'Appam & Chicken Curry',
     malayalamName: 'അപ്പവും ചിക്കൻ കറിയും',
     note: 'Four soft appams with homestyle chicken curry.',
-    imageUrl: '/images/menu-porotta-curries.jpg',
+    imageUrl: '/images/menu-appamchicken.png',
     items: [
       { dishId: 'appam', quantity: 4 },
       { dishId: 'chicken-curry', quantity: 1 },
@@ -26,7 +26,7 @@ export const signaturePairings = [
     name: 'Porotta & Poth Roast',
     malayalamName: 'പൊറോട്ടയും പോത്ത് റോസ്റ്റും',
     note: 'Four flaky porottas with our dark peppery roast.',
-    imageUrl: '/images/menu-porotta-curries.jpg',
+    imageUrl: '/images/menu-porottabeef.png',
     featured: true,
     items: [
       { dishId: 'malabar-porotta', quantity: 4 },
