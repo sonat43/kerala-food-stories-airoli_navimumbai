@@ -1,5 +1,5 @@
 import { createElement } from 'react'
-import { Flame, Leaf, MessageCircle, Sparkles } from 'lucide-react'
+import { Flame, Leaf, MessageCircle } from 'lucide-react'
 import { motion as Motion } from 'framer-motion'
 
 const promises = [
@@ -37,10 +37,6 @@ export default function HospitalityPromises() {
             <div className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.24em] text-clay sm:text-xs"><span className="h-px w-8 bg-clay" /> From kitchen to table</div>
             <h2 id="ordering-heading" className="mt-4 max-w-xl font-display text-3xl font-semibold leading-[1.05] tracking-tight text-teak sm:text-4xl">An order should feel<br className="hidden sm:block" /> as good as the food.</h2>
           </div>
-          {false && <div className="rounded-2xl border border-sand bg-white/65 p-4 shadow-[0_8px_24px_rgba(43,35,29,0.05)] backdrop-blur-sm sm:p-5">
-            <p className="font-display text-xl italic leading-7 text-[#f0d2a1]">“No uncertainty. No chasing. Just a proper Kerala meal on its way.”</p>
-            <p className="mt-3 flex items-center gap-2 text-xs leading-5 text-white/55"><Sparkles size={13} className="shrink-0 text-[#e7c68e]" /> Your order is confirmed by a person before the kitchen gets started.</p>
-          </div>}
         </div>
 
         <div className="relative mt-7 grid gap-3 lg:grid-cols-3 lg:gap-4">

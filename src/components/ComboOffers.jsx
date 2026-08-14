@@ -6,7 +6,7 @@ import { useCart } from '../context/CartContext'
 
 export default function ComboOffers({ dishes }) {
   return (
-    <section id="feasts" className="relative overflow-hidden bg-teak px-5 py-20 text-kasavu sm:px-8 sm:py-28">
+    <section id="feasts" className="relative scroll-mt-20 overflow-hidden bg-teak px-5 py-20 text-kasavu sm:px-8 sm:py-28">
       <div className="heritage-pattern pointer-events-none absolute inset-0 opacity-10" />
       <div className="relative mx-auto max-w-7xl">
         <div className="flex flex-col justify-between gap-7 md:flex-row md:items-end">

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+# Once VITE_SITE_URL is set for the production build, /sitemap.xml is generated automatically.

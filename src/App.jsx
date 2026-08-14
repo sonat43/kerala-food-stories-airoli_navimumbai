@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { motion as Motion } from 'framer-motion'
-import { ArrowDown, ArrowRight, Clock3, MapPin, MessageCircle, Navigation, Phone, Search, ShoppingBag, Sparkles, X } from 'lucide-react'
+import { ArrowDown, Clock3, MapPin, MessageCircle, Navigation, Phone, Search, ShoppingBag, Sparkles, X } from 'lucide-react'
 import Header from './components/Header'
 import CategoryFilter from './components/CategoryFilter'
 import FoodCard from './components/FoodCard'
@@ -8,6 +8,7 @@ import MenuSkeleton from './components/MenuSkeleton'
 import CartDrawer from './components/CartDrawer'
 import ComboOffers from './components/ComboOffers'
 import HospitalityPromises from './components/HospitalityPromises'
+import OnamSadyaPromo from './components/OnamSadyaPromo'
 import { categories } from './data/seedDishes'
 import { fetchDishes } from './services/menuService'
 import { useCart } from './context/CartContext'
@@ -51,18 +52,24 @@ export default function App() {
     }))
     .filter((section) => section.dishes.length), [filteredDishes])
 
+  const signatureDishes = useMemo(() => {
+    const signatureIds = ['chicken-pothichor', 'fish-pothichor', 'chicken-biriyani', 'pothu-roast']
+    const handpicked = signatureIds.map((id) => dishes.find((dish) => dish.id === id)).filter(Boolean)
+    return handpicked.length ? handpicked : dishes.filter((dish) => dish.popular || dish.isChefSpecial).slice(0, 4)
+  }, [dishes])
+
   return (
     <div id="top" className="min-h-screen overflow-x-hidden bg-kasavu text-teak">
       <Header />
 
       <main>
-        <section className="relative isolate min-h-[calc(100svh-76px)] overflow-hidden bg-teak text-white">
+        <section className="relative isolate min-h-[calc(100svh-68px)] overflow-hidden bg-teak text-white">
           <img src="/images/kerala-feast-hero.png" alt="A traditional Kerala feast served on a banana leaf" className="absolute inset-0 h-full w-full object-cover object-[62%_center]" fetchPriority="high" />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(20,16,13,0.98)_0%,rgba(20,16,13,0.9)_30%,rgba(20,16,13,0.42)_59%,rgba(20,16,13,0.08)_100%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(20,16,13,0.65)_0%,transparent_45%)] md:hidden" />
           <div className="heritage-pattern absolute inset-0 opacity-20" />
 
-          <div className="relative mx-auto flex min-h-[calc(100svh-76px)] max-w-7xl items-center px-5 py-20 sm:px-8">
+          <div className="relative mx-auto flex min-h-[calc(100svh-68px)] max-w-7xl items-start px-5 py-10 sm:px-8 sm:py-14 lg:py-16">
             <Motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="max-w-2xl">
               <div className="mb-6 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.24em] text-[#e0bd82]">
                 <span className="h-px w-9 bg-[#e0bd82]" /> Authentic Kerala taste · From Kerala to Airoli
@@ -77,8 +84,8 @@ export default function App() {
                 <a href="#menu" className="flex items-center gap-2.5 rounded-full bg-clay px-6 py-3.5 text-sm font-bold text-white shadow-xl shadow-black/15 transition hover:bg-[#cb5a35]">
                   Explore our menu <ArrowDown size={17} />
                 </a>
-                <a href="#visit" className="flex items-center gap-2 rounded-full border border-white/20 bg-white/[0.06] px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/10">
-                  Find us in Airoli <ArrowRight size={16} />
+                <a href="https://wa.me/917208207729?text=Hello%20Kerala%20Food%20Stories%2C%20I%20would%20like%20to%20place%20an%20order." target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-full border border-white/20 bg-white/[0.06] px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/10">
+                  WhatsApp order <MessageCircle size={16} />
                 </a>
               </div>
               <div className="mt-7 max-w-md border-l-2 border-[#e0bd82]/70 pl-4">
@@ -88,10 +95,13 @@ export default function App() {
               <div className="mt-11 flex flex-wrap gap-x-7 gap-y-3 border-t border-white/12 pt-6 text-xs font-medium text-white/50">
                 <span className="flex items-center gap-2"><Sparkles size={14} className="text-[#e0bd82]" /> Small-batch cooking</span>
                 <span className="flex items-center gap-2"><Clock3 size={14} className="text-[#e0bd82]" /> Open daily · 11 AM–11 PM</span>
+                <span className="flex items-center gap-2"><MapPin size={14} className="text-[#e0bd82]" /> Airoli, Navi Mumbai</span>
               </div>
             </Motion.div>
           </div>
         </section>
+
+        <OnamSadyaPromo />
 
         <section id="menu" className="scroll-mt-24 px-5 py-20 sm:px-8 sm:py-28">
           <div className="mx-auto max-w-7xl">
@@ -133,23 +143,41 @@ export default function App() {
               </div>
             </div>
 
-            <div className="mt-10 rounded-[1.75rem] border border-sand/80 bg-white/55 p-4 shadow-[0_12px_30px_rgba(43,35,29,0.045)] backdrop-blur-sm sm:p-5">
-              <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            {!loading && signatureDishes.length > 0 && (
+              <section className="mt-12" aria-labelledby="most-loved">
+                <div className="flex flex-col gap-3 border-b border-sand pb-5 sm:flex-row sm:items-end sm:justify-between">
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-clay">Start here</p>
+                    <h3 id="most-loved" className="mt-1 font-display text-3xl font-semibold text-teak sm:text-4xl">Most loved at our table.</h3>
+                  </div>
+                  <p className="max-w-md text-sm leading-6 text-teak/55">Four dishes our regulars return for—picked for an easy first order.</p>
+                </div>
+                <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                  {signatureDishes.map((dish) => <FoodCard key={dish.id} dish={dish} />)}
+                </div>
+              </section>
+            )}
+
+            <div className="mt-10 rounded-[1.5rem] border border-sand/80 bg-white/55 p-3 shadow-[0_12px_30px_rgba(43,35,29,0.045)] backdrop-blur-sm sm:p-4">
+              <div className="flex flex-col gap-3">
                 <CategoryFilter categories={categories} selected={selectedCategory} onChange={setSelectedCategory} />
-                <div className="flex shrink-0 items-center gap-1 rounded-full border border-sand/70 bg-white/55 p-1 text-xs font-bold shadow-[0_2px_10px_rgba(43,35,29,0.03)] backdrop-blur-sm">
-                  {[ 
-                    { id: 'all', label: 'All' },
-                    { id: 'veg', label: 'Veg' },
-                    { id: 'nonveg', label: 'Non-veg' },
-                  ].map((option) => (
-                    <button key={option.id} onClick={() => setDietaryFilter(option.id)} className={`rounded-full px-4 py-2 transition ${dietaryFilter === option.id ? 'bg-clay text-white shadow-[0_5px_12px_rgba(184,74,40,0.18)]' : 'text-teak/45 hover:text-teak'}`}>
-                      {option.label}
-                    </button>
-                  ))}
+                <div className="flex items-center justify-between gap-3 border-t border-sand/70 pt-3">
+                  <div className="flex shrink-0 items-center gap-1 rounded-full border border-sand/70 bg-white/55 p-1 text-xs font-bold shadow-[0_2px_10px_rgba(43,35,29,0.03)] backdrop-blur-sm" role="group" aria-label="Dietary preference">
+                    {[
+                      { id: 'all', label: 'All' },
+                      { id: 'veg', label: 'Veg' },
+                      { id: 'nonveg', label: 'Non-veg' },
+                    ].map((option) => (
+                      <button key={option.id} onClick={() => setDietaryFilter(option.id)} aria-pressed={dietaryFilter === option.id} className={`rounded-full px-3 py-1.5 transition sm:px-4 sm:py-2 ${dietaryFilter === option.id ? 'bg-clay text-white shadow-[0_5px_12px_rgba(184,74,40,0.18)]' : 'text-teak/45 hover:text-teak'}`}>
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                  {!loading && <p id="menu-results-count" className="min-w-0 text-right text-[11px] font-semibold leading-4 text-clay/70 sm:text-xs" aria-live="polite">{filteredDishes.length} of {dishes.length} dishes</p>}
                 </div>
               </div>
-              <div className="mt-4 flex flex-col gap-3 border-t border-sand/70 pt-4 sm:flex-row sm:items-center sm:justify-between">
-                <label className="relative block w-full max-w-md">
+              <div className="mt-3 border-t border-sand/70 pt-3">
+                <label className="relative block w-full">
                   <span className="sr-only">Search the menu</span>
                   <Search size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-clay/55" />
                   <input
@@ -157,15 +185,15 @@ export default function App() {
                     value={searchQuery}
                     onChange={(event) => setSearchQuery(event.target.value)}
                     placeholder="Search biryani, seafood, appam…"
-                    className="w-full rounded-2xl border border-sand/80 bg-white/80 py-3 pl-10 pr-10 text-sm text-teak shadow-[0_2px_10px_rgba(43,35,29,0.025)] outline-none backdrop-blur-sm transition placeholder:text-teak/40 focus:border-clay/40 focus:bg-white focus:ring-4 focus:ring-clay/10"
+                    aria-describedby="menu-results-count"
+                    className="w-full rounded-xl border border-sand/80 bg-white/80 py-2.5 pl-10 pr-10 text-sm text-teak shadow-[0_2px_10px_rgba(43,35,29,0.025)] outline-none backdrop-blur-sm transition placeholder:text-teak/40 focus:border-clay/40 focus:bg-white focus:ring-4 focus:ring-clay/10"
                   />
-                  {searchQuery && <button onClick={() => setSearchQuery('')} className="absolute right-2.5 top-1/2 grid h-7 w-7 -translate-y-1/2 place-items-center rounded-full text-teak/35 transition hover:bg-sand hover:text-teak" aria-label="Clear menu search"><X size={14} /></button>}
+                  {searchQuery && <button onClick={() => setSearchQuery('')} className="absolute right-2.5 top-1/2 grid h-6 w-6 -translate-y-1/2 place-items-center rounded-full text-teak/35 transition hover:bg-sand hover:text-teak" aria-label="Clear menu search"><X size={14} /></button>}
                 </label>
-                {!loading && <p className="shrink-0 text-xs font-semibold text-clay/65">Showing {filteredDishes.length} of {dishes.length} dishes</p>}
               </div>
             </div>
 
-            <div className="mt-9">
+            <div id="menu-results" className="mt-9" role="tabpanel">
               {loading ? <MenuSkeleton /> : filteredDishes.length ? (
                 <div className="space-y-14">
                   {menuSections.map((section) => (

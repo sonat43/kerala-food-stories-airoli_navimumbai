@@ -32,7 +32,6 @@ const images = {
 
   mathi: '/images/menu-mathi.png',
   ayala: '/images/menu-ayala.png',
-  mathi: '/images/menu-mathi.png',
   chemballi: '/images/menu-chemballi.png',
   mandhal: '/images/menu-mandhal.png',
   fishcurry: '/images/menu-fishcurry.png',

@@ -99,7 +99,7 @@ export default function Header() {
             transition={{ duration: 0.2, ease: 'easeOut' }}
             className="absolute left-0 right-0 top-full z-50 overflow-hidden border-b border-white/10 bg-[#16100e] px-5 py-3 text-kasavu shadow-[0_12px_24px_rgba(30,25,21,0.28)] lg:hidden"
           >
-            {links.filter((link) => link.label !== 'Pairings').map((link, index) => (
+            {links.map((link, index) => (
               <a key={link.href} href={link.href} onClick={(event) => navigateTo(event, link.href, () => setMobileOpen(false))} className="flex items-center justify-between border-b border-white/10 px-1 py-3.5 text-sm font-semibold text-kasavu/75 last:border-0 transition hover:text-white">
                 <span>{link.label}</span><span className="text-[10px] font-bold tracking-[0.16em] text-[#e0bd82]/70">0{index + 1}</span>
               </a>
